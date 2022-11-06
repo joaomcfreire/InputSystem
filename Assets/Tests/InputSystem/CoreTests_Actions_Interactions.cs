@@ -233,6 +233,46 @@ internal partial class CoreTests
 
     [Test]
     [Category("Actions")]
+
+    public void Actions_CanPerformRectangleGestureInteraction()
+    {
+        ResetTime();
+
+        var mouse = InputSystem.AddDevice<Mouse>();
+
+        var mouseRectangleAction = new InputAction("RectangleMovement", binding: "<Pointer>/position", interactions: "RectangleGesture");
+
+        mouseRectangleAction.Enable();
+
+        using (var mouseRectangle = new InputActionTrace(mouseRectangleAction))
+        {
+
+            // Starting point
+            Move(mouse.position, new Vector2(100f, 100f), time: 1.0);
+            mouseRectangle.Clear();
+            // Move right
+            Move(mouse.position, new Vector2(150f, 100f), time: 1.5);
+            Assert.That(mouseRectangle, Started<RectangleGestureInteraction>(mouseRectangleAction, mouse.position, time: 1.5));
+            mouseRectangle.Clear();
+            Move(mouse.position, new Vector2(200f, 100f), time: 2.0);
+            // Move down
+            Move(mouse.position, new Vector2(200f, 75f), time: 2.5);
+            Move(mouse.position, new Vector2(200f, 50f), time: 3.0);
+            // Move left
+            Move(mouse.position, new Vector2(150f, 50f), time: 3.5);
+            Move(mouse.position, new Vector2(100f, 50f), time: 4.0);
+            // Move up
+            Move(mouse.position, new Vector2(100f, 75f), time: 4.5);
+            mouseRectangle.Clear();
+            Move(mouse.position, new Vector2(100f, 100f), time: 5.0);
+
+            Assert.That(mouseRectangle, Performed<RectangleGestureInteraction>(mouseRectangleAction, mouse.position));
+
+        }
+    }
+
+    [Test]
+    [Category("Actions")]
     public void Actions_CanPerformPressInteraction()
     {
         ResetTime();
