@@ -411,6 +411,19 @@ namespace UnityEngine.InputSystem
             }
         }
 
+        public float defaultSloppinessThreshold
+        {
+            get => m_SloppinessThreshold;
+            set
+            {
+                // ReSharper disable once CompareOfFloatsByEqualityOperator
+                if (m_SloppinessThreshold == value)
+                    return;
+                m_SloppinessThreshold = value;
+                OnChange();
+            }
+        }
+
         /// <summary>
         /// Allows you to specify the default maximum radius that a touch contact may be moved from its origin to evaluate to a tap-interaction.
         /// </summary>
@@ -709,6 +722,7 @@ namespace UnityEngine.InputSystem
         [SerializeField] private float m_DefaultTapTime = 0.2f;
         [SerializeField] private float m_DefaultSlowTapTime = 0.5f;
         [SerializeField] private float m_DefaultHoldTime = 0.4f;
+        [SerializeField] private float m_SloppinessThreshold = 10.0f;
         [SerializeField] private float m_TapRadius = 5;
         [SerializeField] private float m_MultiTapDelayTime = 0.75f;
         [SerializeField] private bool m_DisableRedundantEventsMerging = false;
